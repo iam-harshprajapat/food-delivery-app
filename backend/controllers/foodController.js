@@ -31,7 +31,7 @@ export const AddfoodController = async (req, res) => {
     if (!isCategory) {
       await new Category({
         name: category,
-        image: imageUrl.secure_url,
+        image: image,
         count: 1,
       }).save();
     } else {
