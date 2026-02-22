@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { AppContext } from "../../context/AppContext";
 import SearchResults from "./SearchResults";
+import SearchResultSkeleton from "../skeleton/SearchResultSkeleton";
 
 const SearchBar = () => {
     const searchPlaceholders = ["Food", "Dish", "Restaurant", "Breakfast"];
@@ -12,7 +13,7 @@ const SearchBar = () => {
     const [results, setResults] = useState([]);
     const { backendUrl } = useContext(AppContext);
     const token = localStorage.getItem("userToken");
-
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const delay = setTimeout(() => {
@@ -28,6 +29,7 @@ const SearchBar = () => {
 
     const fetchTypeaheadResult = async () => {
         try {
+            setLoading(true)
             const response = await axios.get(
                 `${backendUrl}/api/search/typeahead?q=${query}`,
                 { headers: { Authorization: `Bearer ${token}` } }
@@ -39,6 +41,9 @@ const SearchBar = () => {
         } catch (error) {
             console.log(error);
         }
+        finally {
+            setLoading(false)
+        }
     };
     useEffect(() => {
         const interval = setInterval(() => {
@@ -47,6 +52,7 @@ const SearchBar = () => {
 
         return () => clearInterval(interval);
     }, []);
+
 
     return (
         <div className="h-[65%] w-[60%] md:w-[30%] border border-[rgba(0,0,0,0.1)] px-2 py-px flex bg-black/5 items-center rounded-md gap-2 relative font-poppins">
@@ -83,7 +89,20 @@ const SearchBar = () => {
 
                 </div>
             )}
-            <SearchResults results={results} />
+            {
+                loading ? (
+                    <SearchResultSkeleton />
+                ) : (
+                    <SearchResults results={results} />
+                )
+            }
+            {
+                query.length > 2 && results.length == 0 && !loading &&
+                <div className="p-4 absolute w-full flex flex-col gap-0 top-full left-0 h-16 shadow-md ">
+                    <p className="text-sm font-semibold">No matched result found for "{query}"</p>
+                    <a href="#PROMO" className="text-xs text-blue-600 italic font-semibold">try out these categories</a>
+                </div>
+            }
         </div>
     );
 };

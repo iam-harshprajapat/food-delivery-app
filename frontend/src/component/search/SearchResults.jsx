@@ -5,12 +5,11 @@ const SearchResults = ({ results }) => {
     if (!results || results.length === 0) return null;
 
     return (
-        <div className="absolute top-full mt-1 w-full bg-primary/5 shadow-lg rounded-md overflow-hidden z-50 backdrop-blur-sm select-none">
-
+        <div className="absolute top-full mt-1 left-0 w-full shadow-lg rounded-md overflow-hidden z-50 select-none">
             {results.map((product) => (
                 <div
                     key={product.objectID}
-                    className="flex items-center gap-3 p-3 hover:bg-primary/20 hover:scale-105 duration-300 cursor-pointer transition border-b border-primary/20"
+                    className="flex items-center gap-3 px-3 py-2 hover:bg-primary/20 duration-200 cursor-pointer transition border-primary/20"
                 >
                     <img
                         src={product.image}

@@ -56,21 +56,21 @@ export const Login = async (req, res) => {
     if (!email || !password) {
       return res.status(400).send({
         success: false,
-        message: "All fields are required",
+        message: "Please enter all the fields",
       });
     }
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).send({
         success: false,
-        message: "User Not Found",
+        message: "Incorrect email or password",
       });
     }
     const comparePassword = await bcrypt.compare(password, user.password);
     if (!comparePassword) {
       return res.status(400).send({
         success: false,
-        message: "Password Doesn't Match",
+        message: "Incorrect email or password",
       });
     }
     const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, {

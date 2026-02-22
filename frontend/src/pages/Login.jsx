@@ -34,8 +34,9 @@ const Login = () => {
         navigate("/");
       }
     } catch (error) {
-      console.log(error);
-      showNotification("Something went wrong", "error");
+      const msg = error.response.data.message;
+      console.log(msg);
+      showNotification(msg, "error");
     }
   };
   return (
